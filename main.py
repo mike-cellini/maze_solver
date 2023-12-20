@@ -25,6 +25,10 @@ class Window:
     def draw_line(self, line, fill_color):
         line.draw(self.__canvas, fill_color)
 
+    def draw_cells(self, cells):
+        for cell in cells:
+            cell.draw(self.__canvas)
+
 
 class Point:
     def __init__(self, x, y):
@@ -50,15 +54,72 @@ class Line:
         canvas.pack()
 
 
+class Cell:
+    def __init__(self, x1, y1, x2, y2, top, right, bottom, left, win):
+        self.__x1 = x1
+        self.__y1 = y1
+        self.__x2 = x2
+        self.__y2 = y2
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+        self.left = left
+        self.__win = win
+
+    def draw(self, canvas):
+        if self.top:
+            canvas.create_line(
+                self.__x1,
+                self.__y1,
+                self.__x2,
+                self.__y1,
+                fill="black",
+                width=2)
+        if self.right:
+            canvas.create_line(
+                self.__x2,
+                self.__y1,
+                self.__x2,
+                self.__y2,
+                fill="black",
+                width=2)
+        if self.bottom:
+            canvas.create_line(
+                self.__x2,
+                self.__y2,
+                self.__x1,
+                self.__y2,
+                fill="black",
+                width=2)
+        if self.left:
+            canvas.create_line(
+                self.__x1,
+                self.__y2,
+                self.__x1,
+                self.__y1,
+                fill="black",
+                width=2)
+
+
+def draw_test_pattern(win):
+    cells = []
+    k = 0
+    for i in range(1, 5):
+        for j in range(1, 5):
+            x1 = i * 50
+            y1 = j * 50
+            top = k & 1 == 1
+            right = k & 2 == 2
+            bottom = k & 4 == 4
+            left = k & 8 == 8
+            cells.append(Cell(x1, y1, x1+25, y1+25, top, right, bottom, left, win))
+            k += 1
+    win.draw_cells(cells)
+
+
 def main():
     win = Window(800, 600)
-    points = [
-        Point(50, 50),
-        Point(50, 100),
-        Point(100, 100)]
-    for i in range(1, len(points)):
-        print(f"{i}")
-        win.draw_line(Line(points[i-1], points[i]), "black")
+    draw_test_pattern(win)
     win.wait_for_close()
 
 
