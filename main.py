@@ -68,37 +68,41 @@ class Cell:
 
     def draw(self, canvas):
         if self.top:
-            canvas.create_line(
-                self.__x1,
-                self.__y1,
-                self.__x2,
-                self.__y1,
-                fill="black",
-                width=2)
+            top_line = Line(
+                Point(self.__x1, self.__y1),
+                Point(self.__x2, self.__y1))
+            self.__win.draw_line(top_line, "black")
         if self.right:
-            canvas.create_line(
-                self.__x2,
-                self.__y1,
-                self.__x2,
-                self.__y2,
-                fill="black",
-                width=2)
+            right_line = Line(
+                Point(self.__x2, self.__y1),
+                Point(self.__x2, self.__y2))
+            self.__win.draw_line(right_line, "black")
         if self.bottom:
-            canvas.create_line(
-                self.__x2,
-                self.__y2,
-                self.__x1,
-                self.__y2,
-                fill="black",
-                width=2)
+            bottom_line = Line(
+                Point(self.__x2, self.__y2),
+                Point(self.__x1, self.__y2))
+            self.__win.draw_line(bottom_line, "black")
         if self.left:
-            canvas.create_line(
-                self.__x1,
-                self.__y2,
-                self.__x1,
-                self.__y1,
-                fill="black",
-                width=2)
+            left_line = Line(
+                Point(self.__x1, self.__y2),
+                Point(self.__x1, self.__y1))
+            self.__win.draw_line(left_line, "black")
+        canvas.pack()
+
+    def get_center(self):
+        x = (self.__x1 + self.__x2) // 2
+        y = (self.__y1 + self.__y2) // 2
+        return Point(x, y)
+
+    def draw_move(self, to_cell, undo=False):
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
+
+        move = Line(self.get_center(), to_cell.get_center())
+
+        self.__win.draw_line(move,
+                             fill_color)
 
 
 def draw_test_pattern(win):
@@ -115,6 +119,8 @@ def draw_test_pattern(win):
             cells.append(Cell(x1, y1, x1+25, y1+25, top, right, bottom, left, win))
             k += 1
     win.draw_cells(cells)
+    for i in range(1, len(cells)):
+        cells[i-1].draw_move(cells[i])
 
 
 def main():
