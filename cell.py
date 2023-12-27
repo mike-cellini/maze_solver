@@ -3,6 +3,9 @@ from point import Point
 
 
 class Cell:
+    WALL_COLOR = "black"
+    NO_WALL_COLOR = "white"
+
     def __init__(self, x1, y1, x2, y2, top, right, bottom, left, win=None):
         self._x1 = x1
         self._y1 = y1
@@ -17,26 +20,39 @@ class Cell:
     def draw(self, canvas):
         if self._win is None:
             return
+
+        top_line = Line(
+            Point(self._x1, self._y1),
+            Point(self._x2, self._y1))
         if self.top:
-            top_line = Line(
-                Point(self._x1, self._y1),
-                Point(self._x2, self._y1))
-            self._win.draw_line(top_line, "black")
+            self._win.draw_line(top_line, self.WALL_COLOR)
+        else:
+            self._win.draw_line(top_line, self.NO_WALL_COLOR)
+
+        right_line = Line(
+            Point(self._x2, self._y1),
+            Point(self._x2, self._y2))
         if self.right:
-            right_line = Line(
-                Point(self._x2, self._y1),
-                Point(self._x2, self._y2))
-            self._win.draw_line(right_line, "black")
+            self._win.draw_line(right_line, self.WALL_COLOR)
+        else:
+            self._win.draw_line(right_line, self.NO_WALL_COLOR)
+
+        bottom_line = Line(
+            Point(self._x2, self._y2),
+            Point(self._x1, self._y2))
         if self.bottom:
-            bottom_line = Line(
-                Point(self._x2, self._y2),
-                Point(self._x1, self._y2))
-            self._win.draw_line(bottom_line, "black")
+            self._win.draw_line(bottom_line, self.WALL_COLOR)
+        else:
+            self._win.draw_line(bottom_line, self.NO_WALL_COLOR)
+
+        left_line = Line(
+            Point(self._x1, self._y2),
+            Point(self._x1, self._y1))
         if self.left:
-            left_line = Line(
-                Point(self._x1, self._y2),
-                Point(self._x1, self._y1))
-            self._win.draw_line(left_line, "black")
+            self._win.draw_line(left_line, self.WALL_COLOR)
+        else:
+            self._win.draw_line(left_line, self.NO_WALL_COLOR)
+
         canvas.pack()
 
     def get_center(self):

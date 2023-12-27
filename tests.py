@@ -13,12 +13,16 @@ class Tests(unittest.TestCase):
         self.assertEqual(
                 len(m1._cells[0]),
                 num_rows)
+
         first_cell = m1._cells[0][0]
         self.assertEqual(first_cell._x1, 0)
         self.assertEqual(first_cell._y1, 0)
+        self.assertEqual(first_cell.top, False)
+
         last_cell = m1._cells[num_cols-1][num_rows-1]
         self.assertEqual(last_cell._x2, num_cols * 10)
         self.assertEqual(last_cell._y2, num_rows * 10)
+        self.assertEqual(last_cell.bottom, False)
 
 
 if __name__ == "__main__":
