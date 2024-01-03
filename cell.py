@@ -16,6 +16,7 @@ class Cell:
         self.bottom = bottom
         self.left = left
         self._win = win
+        self.visited = False
 
     def draw(self, canvas):
         if self._win is None:
