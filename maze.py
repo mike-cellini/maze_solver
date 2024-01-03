@@ -71,6 +71,7 @@ class Maze:
         self._cells[i][j].visited = True
         while True:
             to_visit = []
+
             if i > 0 and not self._cells[i-1][j].visited:
                 to_visit.append((i-1, j))
             if j < len(self._cells[i]) - 1 and not self._cells[i][j+1].visited:
@@ -79,29 +80,27 @@ class Maze:
                 to_visit.append((i+1, j))
             if j > 0 and not self._cells[i][j-1].visited:
                 to_visit.append((i, j-1))
+
             if len(to_visit) == 0:
                 self._draw_cell(i, j)
                 return
+
             k = random.randrange(0, len(to_visit), 1)
             visit_coord = to_visit[k]
             here = self._cells[i][j]
             there = self._cells[visit_coord[0]][visit_coord[1]]
+
             if i > visit_coord[0]:
-                print("Break right")
                 here.left = False
                 there.right = False
             elif j < visit_coord[1]:
-                print("Break bottom")
                 here.bottom = False
                 there.top = False
             elif i < visit_coord[0]:
-                print("Break left")
                 here.right = False
                 there.left = False
             elif j > visit_coord[1]:
-                print("Break top")
                 here.top = False
                 there.bottom = False
-            print(f"Visiting {visit_coord[0]}, {visit_coord[1]}")
-            self._draw_cell(i, j)
+
             self._break_walls_r(visit_coord[0], visit_coord[1])
