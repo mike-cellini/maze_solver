@@ -24,6 +24,13 @@ class Tests(unittest.TestCase):
         self.assertEqual(last_cell._y2, num_rows * 10)
         self.assertEqual(last_cell.bottom, False)
 
+    def test_maze_reset_cells_visited(self):
+        m1 = Maze(0, 0, 5, 5, 10)
+
+        for col in m1._cells:
+            for cell in col:
+                self.assertFalse(cell.visited)
+
 
 if __name__ == "__main__":
     unittest.main()
