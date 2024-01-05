@@ -46,9 +46,11 @@ class Maze:
                 self._draw_cell(i, j)
 
     def _draw_cell(self, i, j):
-        if self._win is None:
-            return
-        self._cells[i][j].draw(self._win.canvas)
+        self._cells[i][j].draw()
+        self._animate()
+
+    def _draw_move(self, here, there, undo=False):
+        here.draw_move(there, undo)
         self._animate()
 
     def _animate(self):
@@ -110,3 +112,38 @@ class Maze:
         for col in self._cells:
             for cell in col:
                 cell.visited = False
+
+    def _solve_r(self, i, j):
+        if i == self._num_cols - 1 and j == self._num_rows - 1:
+            return True
+
+        here = self._cells[i][j]
+        here.visited = True
+
+        while True:
+            to_visit = []
+
+            if i > 0 and not here.left and not self._cells[i-1][j].visited:
+                to_visit.append((i-1, j))
+            if j < len(self._cells[i]) - 1 and not here.bottom and not self._cells[i][j+1].visited:
+                to_visit.append((i, j+1))
+            if i < len(self._cells) - 1 and not here.right and not self._cells[i+1][j].visited:
+                to_visit.append((i+1, j))
+            if j > 0 and not here.top and not self._cells[i][j-1].visited:
+                to_visit.append((i, j-1))
+
+            if len(to_visit) == 0:
+                self._draw_cell(i, j)
+                return False
+
+            for move_index in to_visit:
+                there = self._cells[move_index[0]][move_index[1]]
+                self._draw_move(here, there)
+                solved = self._solve_r(move_index[0], move_index[1])
+                if solved:
+                    return True
+                self._draw_move(here, there, True)
+        return False
+
+    def solve(self):
+        self._solve_r(0, 0)

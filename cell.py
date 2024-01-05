@@ -18,7 +18,7 @@ class Cell:
         self._win = win
         self.visited = False
 
-    def draw(self, canvas):
+    def draw(self):
         if self._win is None:
             return
 
@@ -53,8 +53,6 @@ class Cell:
             self._win.draw_line(left_line, self.WALL_COLOR)
         else:
             self._win.draw_line(left_line, self.NO_WALL_COLOR)
-
-        canvas.pack()
 
     def get_center(self):
         x = (self._x1 + self._x2) // 2
